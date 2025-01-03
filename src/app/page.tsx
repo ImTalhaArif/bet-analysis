@@ -1,35 +1,38 @@
-"use client"; 
-import { useState } from 'react';
-import axios from 'axios';
+"use client";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+import { useState, ChangeEvent } from "react";
+import axios from "axios";
 
 export default function Home() {
-  const [userId, setUserId] = useState('');
-  const [betDetails, setBetDetails] = useState('');
-  const [amount, setAmount] = useState('');
-  const [pick, setPick] = useState('');
-  const [message, setMessage] = useState('');
+  const [userId, setUserId] = useState<string>("");
+  const [betDetails, setBetDetails] = useState<string>("");
+  const [amount, setAmount] = useState<string>("");
+  const [pick, setPick] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
   const [performance, setPerformance] = useState<any>(null);
 
   const handleLockBet = async () => {
     try {
-      const response = await axios.post('agents', {
+      const response = await axios.post("/agents", {
         userId,
         betDetails,
         amount: parseFloat(amount),
         pick,
       });
-      setMessage(response.data.message);
+      setMessage(response.data.message || "Bet locked successfully!");
     } catch (error) {
-      setMessage('Error locking bet.');
+      setMessage("Error locking bet.");
     }
   };
 
   const handleGetPerformance = async () => {
     try {
-      const response = await axios.get(`agents?userId=${userId}`);
+      const response = await axios.get(`/agents?userId=${userId}`);
       setPerformance(response.data);
     } catch (error) {
-      setMessage('Error fetching performance.');
+      setMessage("Error fetching performance.");
     }
   };
 
@@ -43,28 +46,28 @@ export default function Home() {
           type="text"
           placeholder="User ID"
           value={userId}
-          onChange={(e) => setUserId(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => setUserId(e.target.value)}
           className="w-full p-3 border rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
         <input
           type="text"
           placeholder="Bet Details"
           value={betDetails}
-          onChange={(e) => setBetDetails(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => setBetDetails(e.target.value)}
           className="w-full p-3 border rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
         <input
           type="number"
           placeholder="Amount"
           value={amount}
-          onChange={(e) => setAmount(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => setAmount(e.target.value)}
           className="w-full p-3 border rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
         <input
           type="text"
           placeholder="Pick"
           value={pick}
-          onChange={(e) => setPick(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => setPick(e.target.value)}
           className="w-full p-3 border rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
         <button
@@ -87,7 +90,9 @@ export default function Home() {
       {performance && (
         <div className="bg-white shadow-lg p-6 mt-6 rounded-lg w-full max-w-lg">
           <h2 className="text-lg font-bold text-gray-800">Performance Update</h2>
-          <p className="text-gray-700">Total Amount: <span className="font-medium text-gray-900">${performance.totalAmount}</span></p>
+          <p className="text-gray-700">
+            Total Amount: <span className="font-medium text-gray-900">${performance.totalAmount}</span>
+          </p>
           <ul className="mt-4 space-y-2">
             {performance.bets.map((bet: any, index: number) => (
               <li key={index} className="bg-gray-100 p-3 rounded-lg shadow-sm text-gray-800">

@@ -7,7 +7,7 @@ interface Bet {
   pick: string;
 }
 
-let userBets: Record<string, Bet[]> = {}; // Store bets for simplicity
+const userBets: Record<string, Bet[]> = {}; // Store bets for simplicity
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const { method } = req;
